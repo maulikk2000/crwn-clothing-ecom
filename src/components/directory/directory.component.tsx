@@ -15,7 +15,7 @@ const initialState = Array<ISection>(
     title: "hats",
     imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
     id: 1,
-    linkUrl: "shop/hats"
+    linkUrl: "shop"
   },
   {
     title: "jackets",
@@ -49,12 +49,10 @@ const Directory: React.FC = () => {
   const [sections, setsections] = useState(initialState);
   return (
     <div className="directory-menu">
-      {sections.map(({ id, title, imageUrl, size }) => (
+      {sections.map(({ id, ...otherSectionProps }) => (
         <MenuItem
           key={id}
-          title={title}
-          imageUrl={imageUrl}
-          size={size}
+          {...otherSectionProps}
         ></MenuItem>
       ))}
     </div>
