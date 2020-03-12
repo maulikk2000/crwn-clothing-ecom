@@ -1,6 +1,8 @@
 import React, { FC, useState, MouseEvent, FormEvent, ChangeEvent } from "react";
 import "./sign-in.styles.scss";
 import FormInput from "../form-input/form-input.component";
+import CustomButton from "../custom-button/custom-button.component";
+import { signInWithGoogle } from "../../firebase/firebase.utils";
 
 interface IUser {
   email: string;
@@ -61,7 +63,12 @@ const SignIn: FC = () => {
         ></FormInput>
         {/* <label>Password</label> */}
 
-        <input className="button" type="submit" value="Submit Form"></input>
+        {/* <input className="button" type="submit" value="Submit Form"></input> */}
+        <CustomButton type="submit" title="Sign in"></CustomButton>
+        <CustomButton
+          onClick={signInWithGoogle}
+          title="Google Sign in"
+        ></CustomButton>
       </form>
     </div>
   );
