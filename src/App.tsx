@@ -12,14 +12,15 @@ function App() {
   const [currentUser, setcurrentUser] = useState(initialState);
   let unsubscribeFromAuth = null;
   useEffect(() => {
-    unsubscribeFromAuth = firebaseauth.onAuthStateChanged(user => {
+    //unsubscribeFromAuth = firebaseauth.onAuthStateChanged(user => {
+    firebaseauth.onAuthStateChanged(user => {
       setcurrentUser(user);
       console.log("user is", user);
       console.log("current user is ", currentUser?.["email"]);
       //console.log("current user is ", currentUser);
     });
 
-    unsubscribeFromAuth();
+    //unsubscribeFromAuth();
     // return () => {
     //   cleanup
     // };
