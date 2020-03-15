@@ -5,26 +5,41 @@ import { Switch, Route } from "react-router-dom";
 import ShopPage from "./pages/shop/shop.component";
 import HeaderComponent from "./components/header/header.component";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
-import { firebaseauth } from "./firebase/firebase.utils";
+import {
+  firebaseauth,
+  createUserProfileDocument
+} from "./firebase/firebase.utils";
 
 function App() {
   let initialState: any;
   const [currentUser, setcurrentUser] = useState(initialState);
-  let unsubscribeFromAuth = null;
+  //let unsubscribeFromAuth = null;
   useEffect(() => {
     //unsubscribeFromAuth = firebaseauth.onAuthStateChanged(user => {
-    firebaseauth.onAuthStateChanged(user => {
-      setcurrentUser(user);
-      console.log("user is", user);
-      console.log("current user is ", currentUser?.["email"]);
-      //console.log("current user is ", currentUser);
-    });
+    const unsubscribeFromAuth = firebaseauth.onAuthStateChanged(
+      async userAuth => {
+        //setcurrentUser(user);
+        if (userAuth) {
+          const userRef = await createUserProfileDocument(userAuth, null);
+          userRef?.onSnapshot(snapshot => {
+            console.log(snapshot.data());
+            setcurrentUser({
+              id: snapshot.id,
+              ...snapshot.data()
+            });
+          });
+        }
+        //set current user to null
+        setcurrentUser(userAuth);
+      }
+    );
 
     //unsubscribeFromAuth();
-    // return () => {
-    //   cleanup
-    // };
+    return () => {
+      unsubscribeFromAuth();
+    };
   }, [currentUser]);
+  //}, []);
 
   return (
     <div>
