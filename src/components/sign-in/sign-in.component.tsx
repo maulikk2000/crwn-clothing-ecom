@@ -2,7 +2,7 @@ import React, { FC, useState, MouseEvent, FormEvent, ChangeEvent } from "react";
 import "./sign-in.styles.scss";
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-import { signInWithGoogle } from "../../firebase/firebase.utils";
+import { firebaseauth, signInWithGoogle } from "../../firebase/firebase.utils";
 
 interface IUser {
   email: string;
@@ -12,11 +12,19 @@ interface IUser {
 const SignIn: FC = () => {
   const initialState = { email: "", password: "" };
 
-  function handleSubmit(event: FormEvent) {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    alert(event);
-    setuser(initialState);
-  }
+    // alert(event);
+    // setuser(initialState);
+    try {
+      await firebaseauth.signInWithEmailAndPassword(user.email, user.password);
+      //if succeeds, clear the state
+      setuser(initialState);
+      console.log("auth success");
+    } catch (error) {
+      console.log("err is ", error);
+    }
+  };
 
   const handleChange = (event: any) => {
     const { value, name } = event.target;
